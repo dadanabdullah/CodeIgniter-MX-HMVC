@@ -235,11 +235,36 @@ class MX_Router extends CI_Router
 
 	public function set_class($class)
 	{
-		$suffix = $this->config->item('controller_suffix');
-		if (strpos($class, $suffix) === FALSE)
-		{
-			$class .= $suffix;
-		}
-		parent::set_class($class);
+		/**
+		 * Old
+		 * $suffix = $this->config->item('controller_suffix');
+		 * if (strpos($class, $suffix) === FALSE)
+		 * {
+		 *  $class .= $suffix;
+		 * }
+		 * parent::set_class($class);
+		 */
+
+		/** 
+		 * Bug fixes
+		 * --------------------------------------------
+		 * A PHP Error was encountered
+		 * Severity: 8192
+		 * Message: strpos(): Non-string needles will be interpreted as strings in the future. Use an explicit chr() call to preserve the current behavior
+		 * Filename: MX/Router.php
+		 * Line Number: 239
+		 * --------------------------------------------
+		 * @link	https://stackoverflow.com/a/57198551
+		 * @author	Dadan Abdullah (https://dadanabdullah.id)
+		 * 
+		 */
+
+ 		/** New */
+    $suffix = $this->config->item('controller_suffix');
+    if ($suffix && strpos($class, $suffix) === FALSE)
+    {
+      $class .= $suffix;
+    }
+    parent::set_class($class);
 	}
 }
