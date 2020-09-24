@@ -291,7 +291,32 @@ class MX_Loader extends CI_Loader
 			$view = $_view;
 		}
 		
-		return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+		/**
+		 * Old
+		 * return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+		 */
+
+		/** 
+		 * Bug fixes
+		 * --------------------------------------------
+		 * An uncaught Exception was encountered
+		 * Type: Error
+		 * Message: Call to undefined method MY_Loader::_ci_object_to_array()
+		 * Filename: MX/Loader.php
+		 * Line Number: 294
+		 * --------------------------------------------
+		 * @link	https://stackoverflow.com/a/41786939
+		 * @author	Dadan Abdullah (https://dadanabdullah.id)
+		 * 
+		 */
+
+    /** New */
+    if (method_exists($this, '_ci_object_to_array'))
+    {
+      return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+    } else {
+      return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_prepare_view_vars($vars), '_ci_return' => $return));
+    }		 
 	}
 
 	protected function &_ci_get_component($component) 
